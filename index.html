@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Flow in Internet Technology</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #e0e0e0;
+        }
+
+        .vlog-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .intro-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+
+        .intro-description {
+            color: #cccccc;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        .data-flow-types {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .flow-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .flow-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .flow-card.active {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .flow-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .flow-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flow-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .flow-description {
+            color: #cccccc;
+            font-size: 0.95rem;
+        }
+
+        .animation-area {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .client {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            top: 120px;
+            left: 50px;
+        }
+
+        .server {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            top: 120px;
+            right: 50px;
+        }
+
+        .data-packet {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2ecc71;
+            z-index: 5;
+            opacity: 0;
+        }
+
+        .flow-line {
+            position: absolute;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            top: 145px;
+            left: 110px;
+            width: calc(100% - 220px);
+            z-index: 1;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cccccc;
+        }
+
+        @keyframes movePacket {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(calc(100vw - 220px));
+            }
+        }
+
+        @keyframes movePacketBidirectional {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(calc(100vw - 220px));
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes movePacketMultiple {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            25% {
+                opacity: 1;
+                transform: translateX(calc((100vw - 220px) / 3));
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(calc(2 * (100vw - 220px) / 3));
+            }
+            75% {
+                opacity: 1;
+                transform: translateX(calc(100vw - 220px));
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .vlog-content {
+                flex-direction: column;
+            }
+            
+            .intro-section, .data-flow-types {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Data Flow in Internet Technology</h1>
+            <p class="subtitle">Explore how data travels across networks through different communication patterns and protocols. Understand the fundamentals of Simplex, Half-Duplex, and Full-Duplex data transmission.</p>
+        </header>
+
+        <div class="vlog-content">
+            <div class="intro-section">
+                <h2 class="intro-title">Understanding Data Flow</h2>
+                <p class="intro-description">In this interactive vlog, we explore the three primary types of data flow in internet technology. Each type has distinct characteristics and use cases in modern networking.</p>
+                <p class="intro-description"><span class="highlight">Data flow</span> refers to the movement of digital information between devices in a network. The efficiency and capabilities of these flows determine how we communicate, share information, and access services online.</p>
+                <p class="intro-description">Select a data flow type from the right to learn more and see an animation of how it works!</p>
+            </div>
+
+            <div class="data-flow-types">
+                <div class="flow-card active" data-flow="simplex">
+                    <div class="flow-title">
+                        <div class="flow-icon">→</div>
+                        <h3 class="flow-name">Simplex</h3>
+                    </div>
+                    <p class="flow-description">One-way communication where data flows in only one direction. Examples include keyboard to computer, television broadcasting, and radio transmission.</p>
+                </div>
+
+                <div class="flow-card" data-flow="half-duplex">
+                    <div class="flow-title">
+                        <div class="flow-icon">↔</div>
+                        <h3 class="flow-name">Half-Duplex</h3>
+                    </div>
+                    <p class="flow-description">Two-way communication but only one direction at a time. Examples include walkie-talkies, traditional two-way radios, and some network protocols.</p>
+                </div>
+
+                <div class="flow-card" data-flow="full-duplex">
+                    <div class="flow-title">
+                        <div class="flow-icon">⇄</div>
+                        <h3 class="flow-name">Full-Duplex</h3>
+                    </div>
+                    <p class="flow-description">Simultaneous two-way communication where data can flow in both directions at the same time. Examples include telephone conversations and modern Ethernet networks.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="animation-area">
+            <div class="node client">Client</div>
+            <div class="node server">Server</div>
+            <div class="flow-line"></div>
+            <div class="data-packet" id="packet1"></div>
+            <div class="data-packet" id="packet2"></div>
+            <div class="data-packet" id="packet3"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" id="playBtn">Play Animation</button>
+            <button class="control-btn" id="resetBtn">Reset</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Data Flow Vlog &copy; 2023 | Understanding Internet Technology</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flowCards = document.querySelectorAll('.flow-card');
+            const playBtn = document.getElementById('playBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const packets = document.querySelectorAll('.data-packet');
+            let currentFlow = 'simplex';
+            let animationInterval;
+
+            // Set active flow card
+            flowCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    flowCards.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFlow = this.getAttribute('data-flow');
+                    resetAnimation();
+                });
+            });
+
+            // Play animation based on selected flow type
+            playBtn.addEventListener('click', function() {
+                resetAnimation();
+                
+                switch(currentFlow) {
+                    case 'simplex':
+                        animateSimplex();
+                        break;
+                    case 'half-duplex':
+                        animateHalfDuplex();
+                        break;
+                    case 'full-duplex':
+                        animateFullDuplex();
+                        break;
+                }
+            });
+
+            // Reset animation
+            resetBtn.addEventListener('click', resetAnimation);
+
+            function resetAnimation() {
+                packets.forEach(packet => {
+                    packet.style.animation = 'none';
+                    packet.style.opacity = '0';
+                    packet.style.transform = 'translateX(0)';
+                });
+                
+                clearInterval(animationInterval);
+            }
+
+            function animateSimplex() {
+                const packet1 = document.getElementById('packet1');
+                packet1.style.animation = 'movePacket 3s forwards';
+            }
+
+            function animateHalfDuplex() {
+                const packet1 = document.getElementById('packet1');
+                const packet2 = document.getElementById('packet2');
+                
+                packet1.style.animation = 'movePacket 1.5s forwards';
+                
+                setTimeout(() => {
+                    packet2.style.animation = 'movePacketBidirectional 3s forwards';
+                }, 2000);
+            }
+
+            function animateFullDuplex() {
+                const packet1 = document.getElementById('packet1');
+                const packet2 = document.getElementById('packet2');
+                const packet3 = document.getElementById('packet3');
+                
+                packet1.style.animation = 'movePacketMultiple 4s infinite';
+                
+                setTimeout(() => {
+                    packet2.style.animation = 'movePacketMultiple 4s infinite';
+                }, 500);
+                
+                setTimeout(() => {
+                    packet3.style.animation = 'movePacketMultiple 4s infinite';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
